@@ -1,0 +1,37 @@
+{
+  "$schema": "https://kimi.com/schemas/kimi.plugin.schema.json",
+  "name": "correctover-security-hook",
+  "version": "1.0.0",
+  "description": "Pre-tool-use security gate for Kimi Code: runs correctover-scan before file writes and MCP-related shell commands, and blocks the action (exit 2) on fail-level findings such as hardcoded live secrets, plaintext-HTTP MCP servers, or cloud-metadata SSRF targets.",
+  "keywords": [
+    "security",
+    "hooks",
+    "secret-scanning",
+    "mcp",
+    "ssrf",
+    "pre-tool-use"
+  ],
+  "author": "Correctover",
+  "license": "MIT",
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "WriteFile|StrReplaceFile",
+      "command": "node ./hooks/correctover-hook.mjs",
+      "timeout": 180
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "Shell",
+      "command": "node ./hooks/correctover-hook.mjs",
+      "timeout": 180
+    }
+  ],
+  "interface": {
+    "displayName": "Correctover Security Hook",
+    "shortDescription": "Block Kimi Code writes/commands that contain live secrets, plaintext MCP transport, or SSRF targets — before they run.",
+    "longDescription": "A PreToolUse hook that runs the open-source correctover-scan scanner before Kimi Code writes JS/TS files or runs MCP-related shell commands. It blocks the action (Kimi Code exit code 2) when the scanner reports fail-level findings — hardcoded live API keys, plaintext-HTTP MCP server URLs, cloud-metadata (169.254.169.254) SSRF targets, shell:true command execution, or dynamic eval primitives — and feeds the reason back to the model so it can fix the code and retry.\n\nScans run via `npx correctover-scan` (no API key for the free tier); scanner outages, timeouts, or quota exhaustion fail open and log to stderr, so a scanner problem never blocks your work. This is a reminder/light-gate layer, not your only security control — keep permission approvals and code review.\n\nZero-upload alternative for manual checks: https://correctover.com/scan.html",
+    "developerName": "Correctover",
+    "websiteURL": "https://correctover.com"
+  }
+}
