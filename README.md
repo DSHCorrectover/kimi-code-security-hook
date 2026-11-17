@@ -1,5 +1,7 @@
 # Correctover Security Hook for Kimi Code
 
+[**Commercial verification engagements — USD 8,000–15,000, court-ready dossier**](https://dshcorrectover.github.io/correctover-recovery-admission/services.html) · [**Independent audit & conformance**](https://dshcorrectover.github.io/correctover-recovery-admission/services.html)
+
 A **PreToolUse security gate** for [Kimi Code](https://www.kimi.com/code): before the agent writes a JS/TS file or runs MCP-related shell commands, it runs the open-source [`correctover-scan`](https://www.npmjs.com/package/correctover-scan) scanner — and **blocks the action** when it finds fail-level issues like a hardcoded live API key, a plaintext-HTTP MCP server, or a cloud-metadata SSRF target.
 
 The block reason is fed back to the model, so Kimi Code fixes the code (e.g. moves a secret to an environment variable) and retries automatically.
